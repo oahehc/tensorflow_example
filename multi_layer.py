@@ -1,11 +1,7 @@
 import tensorflow as tf
 import numpy as np
-from tensorflow.examples.tutorials.mnist import input_data  # import mnist data
+from tensorflow.examples.tutorials.mnist import input_data
 from datetime import datetime
-# from pandas import DataFrame, read_csv
-# import pandas as pd
-# import operator
-# import math
 
 # # create dataset
 mnist = input_data.read_data_sets('MNIST_data', one_hot=True) # read mnist data
@@ -28,7 +24,7 @@ hiddenLayer1 = 1024
 hiddenLayer2 = 32
 train_drop_rate = 0.5
 inputDimension = train.get('data').shape[1] # 28*28 = 784
-outputDimension = 10 # class 0~9
+outputDimension = train.get('label').shape[1] # class 0~9 = 10
 batch_num = 10
 batch_size = train.get('data').shape[0] // batch_num
 
@@ -37,16 +33,16 @@ batch_size = train.get('data').shape[0] // batch_num
 drop_rate = tf.placeholder(tf.float32) # apply dropout to prevent overfitting
 # first layer: input_x * W1 + b1 = y1, 784 -> 1024
 input_x = tf.placeholder(tf.float32, [None, inputDimension])
-W1 = tf.Variable(tf.truncated_normal([inputDimension, hiddenLayer1]))
+W1 = tf.Variable(tf.zeros([inputDimension, hiddenLayer1]))
 b1 = tf.Variable(tf.zeros([hiddenLayer1]) + 0.01)
 y1 = tf.matmul(input_x, tf.nn.dropout(W1, drop_rate)) + b1
 # second layer: y1 * W2 + b2 = y2, 1024 -> 32
 W2 = tf.Variable(tf.zeros([hiddenLayer1, hiddenLayer2]))
-b2 = tf.Variable(tf.truncated_normal([hiddenLayer2]))
+b2 = tf.Variable(tf.zeros([hiddenLayer2]) + 0.01)
 y2 = tf.matmul(y1, tf.nn.dropout(W2, drop_rate)) + b2
 # output layer: softmax(y2 * W3 + b3) = prediction, 32 -> 10
 W3 = tf.Variable(tf.zeros([hiddenLayer2, outputDimension]))
-b3 = tf.Variable(tf.truncated_normal([outputDimension]))
+b3 = tf.Variable(tf.zeros([outputDimension]) + 0.01)
 prediction = tf.nn.softmax(tf.matmul(y2, tf.nn.dropout(W3, drop_rate)) + b3)
 # loss: use cross_entropy to calculate distance between two distribution
 output_y = tf.placeholder(tf.float32, [None, outputDimension])
