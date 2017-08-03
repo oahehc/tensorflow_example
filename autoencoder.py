@@ -59,10 +59,7 @@ decode_b4 = tf.Variable(tf.truncated_normal([inputDimension]))
 decode_result = tf.nn.sigmoid(tf.matmul(decode_y3, decode_W4) + decode_b4)
 # loss:
 loss = tf.reduce_mean(tf.square(input_x - decode_result))
-# optimizer: GradientDescent + decay learning rate
-global_step = tf.placeholder(tf.int64)
-learning_rate = tf.train.exponential_decay(
-    learning_rate=start_learning_rate, global_step=global_step, decay_steps=decay_steps, decay_rate=decay_rate)
+# optimizer: 
 train_step = tf.train.AdamOptimizer().minimize(loss)
 
 
