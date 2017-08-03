@@ -10,23 +10,30 @@ epochs = 101
 -  Test:  0.9068
 ```
 
-### autoencoder.py : reduce dimension for MNIST images cluster
+---
+
+### autoencoder.py : reduce dimension for MNIST images cluster & visualization
 - data  : MNIST
-- layer : 28*28=784 -> 512 -> 10 -> 2 -> 10 -> 512 -> 784
+- layer : 28*28=784 -> 512 -> 256 -> 64 -> 2 -> 64 -> 256 -> 512 -> 784
 - activation function : sigmoid
-- optimizier : gradient descent + decayed learning rate + min-batch
+- optimizier : Adam + min-batch
 
+---
 
-### tsne_pca.py : reduce dimension for MNIST images cluster
+### tsne_pca.py : reduce dimension for MNIST images cluster & visualization
 - PCA
 - t-SNE
 - PCA + t-SNE : performance check
 
 
+
+
+
+
 ### CNN
 
 - additional : L2 regularization
-
+- optimizier : gradient descent + decayed learning rate + min-batch
 
 
 ### RNN
