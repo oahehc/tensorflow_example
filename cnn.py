@@ -92,9 +92,12 @@ print('*** finish ***')
 
 # # TRAINING RESULT TEST
 test_num = 10
-test_image = mnist.test.images[0:test_num, ]
+test_dataset = mnist.test.images
+np.random.shuffle(test_dataset)
+test_image = test_dataset[0:test_num, ]
 test_result = sess.run(tf.argmax(prediction,1), feed_dict={input_x:test_image, drop_rate: 1.0})
+
 for i in range(test_num):
-    print('Prediction: ',test_result[i])
+    print('prediction: ',test_result[i])
     plt.imshow(np.reshape(test_image[i], (28, 28)))
     plt.show()
