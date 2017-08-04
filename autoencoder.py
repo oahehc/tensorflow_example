@@ -4,7 +4,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 from datetime import datetime
 import matplotlib.pyplot as plt
 
-# # create dataset
+# # DATASET
 mnist = input_data.read_data_sets(
     'MNIST_data', one_hot=True)  # read mnist data
 train = {
@@ -17,7 +17,7 @@ test = {
 }
 
 
-# # config
+# # CONFIG
 epochs = 101
 print_range = (epochs - 1) // 10
 hiddenLayer1 = 512
@@ -29,7 +29,7 @@ batch_size = 256
 batch_num = train.get('data').shape[0] // batch_size
 
 
-# # create model
+# # MODEL
 # ENCODE : 784 -> 512 -> 256 -> 64 -> 2
 input_x = tf.placeholder(tf.float32, [None, inputDimension])
 encode_W1 = tf.Variable(tf.truncated_normal([inputDimension, hiddenLayer1]))
@@ -63,7 +63,7 @@ loss = tf.reduce_mean(tf.square(input_x - decode_result))
 train_step = tf.train.AdamOptimizer().minimize(loss)
 
 
-# # Training
+# # TRAIN
 init = tf.global_variables_initializer()
 sess = tf.Session()
 sess.run(init)

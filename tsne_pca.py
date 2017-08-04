@@ -6,7 +6,7 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from datetime import datetime
 
-# # create dataset
+# # DATASET
 mnist = input_data.read_data_sets(
     'MNIST_data', one_hot=True)  # read mnist data
 testData = mnist.test.images

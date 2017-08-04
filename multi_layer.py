@@ -3,7 +3,7 @@ import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 from datetime import datetime
 
-# # create dataset
+# # DATASET
 mnist = input_data.read_data_sets('MNIST_data', one_hot=True) # read mnist data
 train = {
     'data': mnist.train.images,
@@ -17,7 +17,7 @@ test = {
 # print(test.get('data').shape)  # (10000, 784)
 
 
-# # config
+# # CONFIG
 epochs = 101
 print_range = (epochs - 1) // 20
 hiddenLayer1 = 1024
@@ -29,7 +29,7 @@ batch_num = 10
 batch_size = train.get('data').shape[0] // batch_num
 
 
-# # create model
+# # MODEL
 drop_rate = tf.placeholder(tf.float32) # apply dropout to prevent overfitting
 # first layer: input_x * W1 + b1 = y1, 784 -> 1024
 input_x = tf.placeholder(tf.float32, [None, inputDimension])
@@ -47,13 +47,13 @@ prediction = tf.nn.softmax(tf.matmul(y2, tf.nn.dropout(W3, drop_rate)) + b3)
 # loss: use cross_entropy to calculate distance between two distribution
 output_y = tf.placeholder(tf.float32, [None, outputDimension])
 loss = tf.reduce_mean(-tf.reduce_sum(output_y*tf.log(prediction), reduction_indices=[1]))
-# accuracy: choose max prediction as result
+# accuracy: choose max probability as prediction
 accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(prediction,1), tf.argmax(output_y,1)), tf.float32))
 # optimizer: Adam
 train_step = tf.train.AdamOptimizer().minimize(loss)
 
 
-# # Training
+# # TRAIN
 init = tf.global_variables_initializer()
 sess = tf.Session()
 sess.run(init)

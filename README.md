@@ -1,5 +1,5 @@
 ### multi_layer.py
-#### basic deep learning model for classify number's images from 0 to 9
+#### basic deep learning model to classify number's images from 0 to 9
 - data  : MNIST
 - layer : 28*28=784 -> 1024 -> 32 -> 10
 - activation function : softmax
@@ -12,12 +12,22 @@ epochs = 101
 ```
 
 ---
-
-### CNN
-
+### cnn.py
+#### apply CNN model to classify number's images from 0 to 9
+- data  : MNIST
+- layer : 28 * 28 * 1 -> 14 * 14 * 4 -> 7 * 7 * 8 -> 512 -> 10
+- activation function : Relu, Sigmoid
+- additional : dropout
+- optimizier : Adam + min-batch
+```
+epochs = 11
+*Train only measure min-batch
+      | Relu	  | Sigmoid   | None
+Train | 0.990234  | 0.953125  | 0.984375
+Test  | 0.9875	  | 0.9595    | 0.9826
+```
 
 --- 
-
 ### autoencoder.py
 #### reduce dimension for MNIST images cluster & visualization
 - data  : MNIST
@@ -37,7 +47,6 @@ epochs = 101
 ![Imgur](http://i.imgur.com/KQih2JE.png)
 
 ---
-
 ### tsne_pca.py
 #### reduce dimension for MNIST images cluster & visualization
 - PCA
