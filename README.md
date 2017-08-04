@@ -1,4 +1,4 @@
-### multi_layer.py
+### Basic_Model.py
 #### basic deep learning model to classify number's images from 0 to 9
 - data  : MNIST
 - layer : 28*28=784 -> 1024 -> 32 -> 10
@@ -12,7 +12,7 @@ epochs = 101
 ```
 
 ---
-### cnn.py
+### CNN.py
 #### apply CNN model to classify number's images from 0 to 9
 - data  : MNIST
 - layer : 28 * 28 * 1 -> 14 * 14 * 4 -> 7 * 7 * 8 -> 512 -> 10
@@ -28,13 +28,12 @@ Test  | 0.9875	  | 0.9595    | 0.9826
 ```
 
 --- 
-### autoencoder.py
+### Autoencoder.py
 #### reduce dimension for MNIST images cluster & visualization
 - data  : MNIST
 - layer : 28*28=784 -> 512 -> 256 -> 64 -> 2 -> 64 -> 256 -> 512 -> 784
-- activation function : sigmoid
+- activation function : Sigmoid
 - optimizier : Adam + min-batch
-
 ```
 epochs = 101
 - Train Loss :  0.0713046
@@ -47,7 +46,7 @@ epochs = 101
 ![Imgur](http://i.imgur.com/KQih2JE.png)
 
 ---
-### tsne_pca.py
+### t-SNE_PCA.py
 #### reduce dimension for MNIST images cluster & visualization
 - PCA
 - t-SNE
@@ -61,19 +60,24 @@ used_time AND result
 ![Imgur](http://i.imgur.com/4yDlTsF.png)
 
 ---
+### VAE.py
+#### 
 
 
 
 
 
+
+
+---
 
 - additional : L2 regularization
 - optimizier : gradient descent + decayed learning rate + min-batch
 
 
 
+### VAE
+### GAN
 ### RNN
 ### CBOW
 ### Skip-Gram
-### VAM
-### GAN

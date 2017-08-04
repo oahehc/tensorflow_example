@@ -15,6 +15,7 @@ def weight_variable(shape):
 def bias_variable(shape):
     return tf.Variable(tf.zeros(shape) + 0.1)
 
+
 # # DATASET
 mnist = input_data.read_data_sets('MNIST_data', one_hot=True) # read mnist data
 
