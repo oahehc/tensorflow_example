@@ -45,7 +45,7 @@ b3 = tf.Variable(tf.zeros([outputDimension]) + 0.01)
 prediction = tf.nn.softmax(tf.matmul(y2, tf.nn.dropout(W3, drop_rate)) + b3)
 # loss: use cross_entropy to calculate distance between two distribution
 output_y = tf.placeholder(tf.float32, [None, outputDimension])
-loss = tf.reduce_mean(-tf.reduce_sum(output_y*tf.log(prediction), reduction_indices=[1]))
+loss = tf.reduce_mean(-tf.reduce_sum(output_y*tf.log(prediction), axis=1))
 # accuracy: choose max probability as prediction
 accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(prediction,1), tf.argmax(output_y,1)), tf.float32))
 # optimizer: Adam

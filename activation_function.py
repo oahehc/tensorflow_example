@@ -11,8 +11,8 @@ def calculate_elu(valArray):
             temp_list.append(val)
     return temp_list
 
-step = 10
-x_axis = np.linspace(step*-1, step, num=step*20+1)
+plot_range = 10
+x_axis = np.linspace(plot_range*-1, plot_range, num=plot_range*20+1)
 zeros = np.zeros(x_axis.shape)
 relu = np.maximum(x_axis, zeros)
 softplus = np.log(np.exp(x_axis) + 1)
