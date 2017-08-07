@@ -1,3 +1,9 @@
+### activation_function
+#### plot activation function
+![Imgur](http://i.imgur.com/qh2ERFy.png)
+
+
+--- 
 ### Basic_Model.py
 #### basic deep learning model to classify number's images from 0 to 9
 - data  : MNIST
