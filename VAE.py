@@ -1,6 +1,7 @@
 '''
 Reference: 
 https://www.youtube.com/watch?v=8zomhgKrsmQ&t=112s
+http://blog.csdn.net/jackytintin/article/details/53641885
 https://jmetzen.github.io/2015-11-27/vae.html
 https://github.com/oduerr/dl_tutorial/blob/master/tensorflow/vae/vae_demo.ipynb
 '''
@@ -44,9 +45,9 @@ b_mean = bias([n_z])
 W_sigma = weights([layer_2, n_z])
 b_sigma = bias([n_z])
 z_mean = tf.add(tf.matmul(h_2, W_mean), b_mean)
+z_log_sigma_sq = tf.add(tf.matmul(h_2, W_sigma), b_sigma)
 input_data_num = tf.placeholder(tf.int64)
 eps = tf.random_normal((input_data_num, n_z), 0, 1, dtype=tf.float32) # random number generate from N(0,1)
-z_log_sigma_sq = tf.add(tf.matmul(h_2, W_sigma), b_sigma)
 z = tf.add(z_mean, tf.multiply(tf.sqrt(tf.exp(z_log_sigma_sq)), eps)) # mean + noise
 # # DECODER
 W_fc1_g = weights([n_z, layer_2])
@@ -57,9 +58,9 @@ b_fc2_g = bias([layer_1])
 h_2_g   = tf.nn.softplus(tf.matmul(h_1_g, W_fc2_g) + b_fc2_g)
 x_reconstr_mean = tf.nn.sigmoid(tf.add(tf.matmul(h_2_g, weights([layer_1, 28*28])), bias([28*28])))
 # # LOSS
-reconstr_loss = -tf.reduce_sum(x * tf.log(1e-10 + x_reconstr_mean) + (1-x) * tf.log(1e-10 + 1 - x_reconstr_mean), axis=1) # cross-entropy
-latent_loss = -0.5 * tf.reduce_sum(1 + z_log_sigma_sq - tf.square(z_mean) - tf.sqrt(tf.exp(z_log_sigma_sq)), axis=1) # maximize likelihood base on current x => minimize KL-divergence
-cost = tf.reduce_mean(reconstr_loss + latent_loss)
+cross_entropy = -tf.reduce_sum(x * tf.log(1e-10 + x_reconstr_mean) + (1-x) * tf.log(1e-10 + 1 - x_reconstr_mean), axis=1)
+kl_divergence = -0.5 * tf.reduce_sum(1 + z_log_sigma_sq - tf.square(z_mean) - tf.exp(z_log_sigma_sq), axis=1) # maximize likelihood base on current x => minimize KL-divergence
+cost = tf.reduce_mean(cross_entropy + kl_divergence)
 optimizer =  tf.train.AdamOptimizer(learning_rate=0.001).minimize(cost)
 
 
