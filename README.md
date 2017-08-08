@@ -1,5 +1,4 @@
 ### activation_function
-#### plot activation function
 ![Imgur](http://i.imgur.com/qh2ERFy.png)
 
 
@@ -27,10 +26,10 @@ epochs = 101
 - optimizier : Adam + min-batch
 ```
 epochs = 11
-*Train only measure min-batch
       | Relu	  | Sigmoid   | None
-Train | 0.990234  | 0.953125  | 0.984375
+Train | 0.990234    | 0.953125  | 0.984375
 Test  | 0.9875	  | 0.9595    | 0.9826
+*Train only measure min-batch
 ```
 
 --- 
@@ -45,10 +44,10 @@ epochs = 101
 - Train Loss :  0.0713046
 -  Test Loss :  0.0757816
 ```
-- original image VS decoder
+- original image VS decoder<br>
 ![Imgur](http://i.imgur.com/sleJQZK.png)
 
-- cluster by encoder
+- cluster by encoder<br>
 ![Imgur](http://i.imgur.com/KQih2JE.png)
 
 ---
@@ -58,7 +57,7 @@ epochs = 101
 - t-SNE
 - PCA + t-SNE : combine PCA and t-SNE to prevent performance issue when apply t-SNE with high dimension data
 ```
-used_time AND result
+used_time
 - PCA          0:00:00.782207
 - t-SNE        0:04:43.643358
 - PCA + t-SNE  0:03:29.427107
@@ -68,17 +67,34 @@ used_time AND result
 ---
 ### VAE.py
 #### 
-
-
-
-
-
+- data  : MNIST
+- layer : 28*28=784 -> 512 -> 512 -> 2(mean, var) -> 512 -> 512 -> 784
+- activation function : softplus, sigmoid
+- optimizier : Adam + min-batch
+```
+Epoch: 1 cost= 197.138191134
+Epoch: 11 cost= 153.145961379
+Epoch: 21 cost= 147.470246073
+Epoch: 31 cost= 144.192750588
+Epoch: 41 cost= 142.880368568
+Epoch: 51 cost= 141.337800495
+Epoch: 61 cost= 140.225197319
+Epoch: 71 cost= 139.715160308
+Epoch: 81 cost= 139.138251511
+Epoch: 91 cost= 138.459720549
+Epoch: 101 cost= 137.795099627
+```
+- original image VS decoder<br>
+![Imgur](http://i.imgur.com/tZLb76r.png)
+- generate images<br>
+![Imgur](http://i.imgur.com/pctUmsS.png)
 
 
 ---
 
 - additional : L2 regularization
-- optimizier : gradient descent + decayed learning rate + min-batch
+- additional : Xavier initialization
+- optimizier : decayed learning rate
 
 
 

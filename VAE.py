@@ -1,11 +1,15 @@
 '''
-reference: https://github.com/oduerr/dl_tutorial/blob/master/tensorflow/vae/vae_demo.ipynb
+Reference: 
+https://www.youtube.com/watch?v=8zomhgKrsmQ&t=112s
+https://jmetzen.github.io/2015-11-27/vae.html
+https://github.com/oduerr/dl_tutorial/blob/master/tensorflow/vae/vae_demo.ipynb
 '''
 import numpy as np
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 from datetime import datetime
 import matplotlib.pyplot as plt
+%matplotlib inline
 
 def weights(shape):
     return tf.Variable(tf.truncated_normal(shape, stddev=0.1))
@@ -17,13 +21,14 @@ mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
 
 # # CONFIG
 save_filename = 'model/model.ckpt'
-layer_1 = 500
-layer_2 = 128
-batch_size = 64
+n_samples = mnist.train.num_examples
 n_z = 2 # Dimension of the latent space
-total_batch = mnist.train.num_examples // batch_size
-epochs = 5
-beta = 1
+layer_1 = 512
+layer_2 = 512
+batch_size = 128
+total_batch = n_samples // batch_size
+epochs = 101
+print_range = (epochs - 1) // 10
 
 
 # # ENCODER
@@ -34,14 +39,14 @@ h_1   = tf.nn.softplus(tf.matmul(x, W_fc1) + b_fc1)
 W_fc2 = weights([layer_1, layer_2])
 b_fc2 = bias([layer_2])
 h_2   = tf.nn.softplus(tf.matmul(h_1, W_fc2) + b_fc2)
-# Parameters for the Gaussian
 W_mean = weights([layer_2, n_z])
 b_mean = bias([n_z])
 W_sigma = weights([layer_2, n_z])
 b_sigma = bias([n_z])
 z_mean = tf.add(tf.matmul(h_2, W_mean), b_mean)
+input_data_num = tf.placeholder(tf.int64)
+eps = tf.random_normal((input_data_num, n_z), 0, 1, dtype=tf.float32) # random number generate from N(0,1)
 z_log_sigma_sq = tf.add(tf.matmul(h_2, W_sigma), b_sigma)
-eps = tf.random_normal((batch_size, n_z), 0, 1, dtype=tf.float32) # random number generate from N(0,1)
 z = tf.add(z_mean, tf.multiply(tf.sqrt(tf.exp(z_log_sigma_sq)), eps)) # mean + noise
 # # DECODER
 W_fc1_g = weights([n_z, layer_2])
@@ -52,13 +57,13 @@ b_fc2_g = bias([layer_1])
 h_2_g   = tf.nn.softplus(tf.matmul(h_1_g, W_fc2_g) + b_fc2_g)
 x_reconstr_mean = tf.nn.sigmoid(tf.add(tf.matmul(h_2_g, weights([layer_1, 28*28])), bias([28*28])))
 # # LOSS
-reconstr_loss = -tf.reduce_sum(x * tf.log(1e-10 + x_reconstr_mean) + (1-x) * tf.log(1e-10 + 1 - x_reconstr_mean), axis=1)
-latent_loss = beta * -1 * tf.reduce_sum(1 + z_log_sigma_sq - tf.square(z_mean) - tf.sqrt(tf.exp(z_log_sigma_sq)), axis=1)
+reconstr_loss = -tf.reduce_sum(x * tf.log(1e-10 + x_reconstr_mean) + (1-x) * tf.log(1e-10 + 1 - x_reconstr_mean), axis=1) # cross-entropy
+latent_loss = -0.5 * tf.reduce_sum(1 + z_log_sigma_sq - tf.square(z_mean) - tf.sqrt(tf.exp(z_log_sigma_sq)), axis=1) # maximize likelihood base on current x => minimize KL-divergence
 cost = tf.reduce_mean(reconstr_loss + latent_loss)
 optimizer =  tf.train.AdamOptimizer(learning_rate=0.001).minimize(cost)
 
 
-# TRAIN
+# # TRAIN
 init = tf.global_variables_initializer()
 sess = tf.Session()
 sess.run(init)
@@ -67,44 +72,47 @@ for epoch in range(epochs):
     total_cost = 0
     for i in range(total_batch):
         batch_xs, _ = mnist.train.next_batch(batch_size)
-        _, cost_val = sess.run((optimizer, cost), feed_dict={x: batch_xs})
+        _, cost_val = sess.run((optimizer, cost), feed_dict={x: batch_xs, input_data_num: batch_size})
         total_cost += cost_val
-    print('Epoch:', epoch+1, 'cost=', total_cost/total_batch)
+    if epoch%print_range == 0:
+        print('Epoch:', epoch+1, 'cost=', total_cost/total_batch)
 
-save_path = saver.save(sess, save_filename) #Saves the weights (not the graph)
+save_path = saver.save(sess, save_filename)
 print('Model saved in file: ', format(save_path))
 
 
-# # PLOT : Mapping original and decode result
+# # PLOT : mapping original image with decode result
 saver = tf.train.Saver()
-check_num = 10
+check_num = 5
+plot_data_num = 2000
 with tf.Session() as sess:
     saver.restore(sess, save_filename)
     print('Model restored.')
-    x_sample = mnist.test.next_batch(64)[0]
-    x_reconstruct, z_vals, z_mean_val = sess.run((x_reconstr_mean, z, z_mean), feed_dict={x: x_sample})
+    x_sample, x_label = mnist.test.next_batch(plot_data_num)
+    x_reconstruct, z_vals, z_mean_val = sess.run((x_reconstr_mean, z, z_mean), feed_dict={x: x_sample, input_data_num: plot_data_num})
 
-    plt.figure(figsize=(8, 12))
+    plt.figure(figsize=(8, check_num*2))
     for i in range(check_num):
         plt.subplot(check_num, 3, 3*i + 1)
         plt.imshow(x_sample[i].reshape(28, 28), vmin=0, vmax=1,  interpolation='none', cmap=plt.get_cmap('gray'))
-        plt.title('Test input')
+        plt.title('Original')
         
         plt.subplot(check_num, 3, 3*i + 2)
-        plt.scatter(z_vals[:,0],z_vals[:,1], c='gray', alpha=0.5)
-        plt.scatter(z_mean_val[i,0],z_mean_val[i,1], c='green', s=64, alpha=0.5)
-        plt.scatter(z_vals[i,0],z_vals[i,1], c='blue', s=16, alpha=0.5)
+        plt.scatter(z_vals[:,0],z_vals[:,1], c=np.argmax(x_label, axis=1), s=10, alpha=.2) # mnist data cluster
+        plt.colorbar()
+        plt.scatter(z_mean_val[i,0], z_mean_val[i,1], c='black', s=30, alpha=.9) # mean
+        plt.scatter(z_vals[i,0],z_vals[i,1], c='red', s=30, alpha=.9) # mean + noise
         plt.xlim((-3,3))
         plt.ylim((-3,3))
         plt.title('Latent Space')
         
         plt.subplot(check_num, 3, 3*i + 3)
         plt.imshow(x_reconstruct[i].reshape(28, 28), vmin=0, vmax=1, interpolation='none', cmap=plt.get_cmap('gray'))
-        plt.title('Reconstruction')
+        plt.title('Decode')
     plt.tight_layout()
 
 
-# # PLOT : generate iamge
+# # PLOT : generate images
 num = 20
 linspace = np.linspace(-3, 3, num)
 canvas = np.empty((28*num, 28*num))
