@@ -72,22 +72,17 @@ used_time
 - activation function : softplus, sigmoid
 - optimizier : Adam + min-batch
 ```
-Epoch: 1 cost= 197.138191134
-Epoch: 11 cost= 153.145961379
-Epoch: 21 cost= 147.470246073
-Epoch: 31 cost= 144.192750588
-Epoch: 41 cost= 142.880368568
-Epoch: 51 cost= 141.337800495
-Epoch: 61 cost= 140.225197319
-Epoch: 71 cost= 139.715160308
-Epoch: 81 cost= 139.138251511
-Epoch: 91 cost= 138.459720549
-Epoch: 101 cost= 137.795099627
+Epoch: 1 cost= 196.581512416
+Epoch: 21 cost= 146.854643957
+Epoch: 41 cost= 142.512102212
+Epoch: 61 cost= 140.136859013
+Epoch: 81 cost= 138.670617768
+Epoch: 101 cost= 137.499377324
 ```
 - original image VS decoder<br>
-![Imgur](http://i.imgur.com/tZLb76r.png)
+![Imgur](http://i.imgur.com/qIyxc9L.png)
 - generate images<br>
-![Imgur](http://i.imgur.com/pctUmsS.png)
+![Imgur](http://i.imgur.com/wkCjX2z.png)
 
 
 ---

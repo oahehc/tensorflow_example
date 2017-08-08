@@ -1,5 +1,6 @@
 '''
 Reference: 
+https://arxiv.org/pdf/1312.6114.pdf
 https://www.youtube.com/watch?v=8zomhgKrsmQ&t=112s
 http://blog.csdn.net/jackytintin/article/details/53641885
 https://jmetzen.github.io/2015-11-27/vae.html
