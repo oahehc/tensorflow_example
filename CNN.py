@@ -70,35 +70,33 @@ accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(prediction,1), tf.argmax(ou
 train_step = tf.train.AdamOptimizer().minimize(loss)
 
 
-# # TRAIN
-init = tf.global_variables_initializer()
-sess = tf.Session()
-sess.run(init)
-for epoch in range(epochs):
-    # min batch
-    for i in range(batch_num):
-        batch_data, batch_label = mnist.train.next_batch(batch_size)   
-        sess.run(train_step, feed_dict={input_x:batch_data, output_y:batch_label, drop_rate: train_drop_rate})
+with tf.Session() as sess:
+    # # TRAIN
+    init = tf.global_variables_initializer()
+    sess.run(init)
+    for epoch in range(epochs):
+        # min batch
+        for i in range(batch_num):
+            batch_data, batch_label = mnist.train.next_batch(batch_size)   
+            sess.run(train_step, feed_dict={input_x:batch_data, output_y:batch_label, drop_rate: train_drop_rate})
 
-    # print train process
-    if epoch%print_range == 0:
-        # use whole train dataset in calculate accuracy might exhaust memory
-        accuracy_train = sess.run(accuracy, feed_dict={input_x:batch_data, output_y:batch_label, drop_rate: 1.0})
-        accuracy_test = sess.run(accuracy, feed_dict={input_x:mnist.test.images, output_y:mnist.test.labels, drop_rate: 1.0})
-        print(datetime.now(), epoch)
-        print('- Train: ', accuracy_train)
-        print('-  Test: ', accuracy_test)
-print('*** finish ***')
+        # print train process
+        if epoch%print_range == 0:
+            # use whole train dataset in calculate accuracy might exhaust memory
+            accuracy_train = sess.run(accuracy, feed_dict={input_x:batch_data, output_y:batch_label, drop_rate: 1.0})
+            accuracy_test = sess.run(accuracy, feed_dict={input_x:mnist.test.images, output_y:mnist.test.labels, drop_rate: 1.0})
+            print(datetime.now(), epoch)
+            print('- Train: ', accuracy_train)
+            print('-  Test: ', accuracy_test)
+    print('*** finish ***')
 
-
-# # TRAINING RESULT TEST
-test_num = 10
-test_dataset = mnist.test.images
-np.random.shuffle(test_dataset)
-test_image = test_dataset[0:test_num, ]
-test_result = sess.run(tf.argmax(prediction,1), feed_dict={input_x:test_image, drop_rate: 1.0})
-
-for i in range(test_num):
-    print('prediction: ',test_result[i])
-    plt.imshow(np.reshape(test_image[i], (28, 28)))
-    plt.show()
+    # # TRAINING RESULT TEST
+    test_num = 10
+    test_dataset = mnist.test.images
+    # np.random.shuffle(test_dataset)
+    test_image = test_dataset[0:test_num, ]
+    test_result = sess.run(tf.argmax(prediction,1), feed_dict={input_x:test_image, drop_rate: 1.0})
+    for i in range(test_num):
+        print('prediction: ',test_result[i])
+        plt.imshow(np.reshape(test_image[i], (28, 28)))
+        plt.show()

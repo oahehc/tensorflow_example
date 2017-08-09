@@ -86,15 +86,25 @@ Epoch: 101 cost= 137.499377324
 
 
 ---
+### CBOW
+
+
+---
+### Skip-Gram
+
+
+
+
+---
+### RNN
+
+
 
 - additional : L2 regularization
 - additional : Xavier initialization
 - optimizier : decayed learning rate
+TensorBoard
 
 
-
-### VAE
 ### GAN
-### RNN
-### CBOW
-### Skip-Gram
+### transfer learning

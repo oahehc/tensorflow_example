@@ -53,21 +53,21 @@ train_step = tf.train.AdamOptimizer().minimize(loss)
 
 
 # # TRAIN
-init = tf.global_variables_initializer()
-sess = tf.Session()
-sess.run(init)
-for epoch in range(epochs):
-    # min batch
-    for i in range(batch_num):
-        batch_data, batch_label = mnist.train.next_batch(batch_size)   
-        sess.run(train_step, feed_dict={input_x:batch_data, output_y:batch_label, drop_rate: train_drop_rate})
+with tf.Session() as sess:
+    init = tf.global_variables_initializer()
+    sess.run(init)
+    for epoch in range(epochs):
+        # min batch
+        for i in range(batch_num):
+            batch_data, batch_label = mnist.train.next_batch(batch_size)   
+            sess.run(train_step, feed_dict={input_x:batch_data, output_y:batch_label, drop_rate: train_drop_rate})
 
-    # print train process
-    if epoch%print_range == 0:
-        accuracy_train = sess.run(accuracy, feed_dict={input_x:train.get('data'), output_y:train.get('label'), drop_rate: 1.0})
-        accuracy_test = sess.run(accuracy, feed_dict={input_x:test.get('data'), output_y:test.get('label'), drop_rate: 1.0})
-        print(datetime.now(), epoch)
-        print('- Train: ', accuracy_train)
-        print('-  Test: ', accuracy_test)
+        # print train process
+        if epoch%print_range == 0:
+            accuracy_train = sess.run(accuracy, feed_dict={input_x:train.get('data'), output_y:train.get('label'), drop_rate: 1.0})
+            accuracy_test = sess.run(accuracy, feed_dict={input_x:test.get('data'), output_y:test.get('label'), drop_rate: 1.0})
+            print(datetime.now(), epoch)
+            print('- Train: ', accuracy_train)
+            print('-  Test: ', accuracy_test)
 
-print('*** finish ***')
+    print('*** finish ***')

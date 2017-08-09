@@ -64,28 +64,28 @@ train_step = tf.train.AdamOptimizer().minimize(loss)
 
 
 # # TRAIN
-init = tf.global_variables_initializer()
-sess = tf.Session()
-sess.run(init)
-for epoch in range(epochs):
-    # min batch
-    for i in range(batch_num):
-        batch_data, batch_label = mnist.train.next_batch(batch_size)
-        sess.run(train_step, feed_dict={input_x: batch_data})
+with tf.Session() as sess:
+    init = tf.global_variables_initializer()
+    sess.run(init)
+    for epoch in range(epochs):
+        # min batch
+        for i in range(batch_num):
+            batch_data, batch_label = mnist.train.next_batch(batch_size)
+            sess.run(train_step, feed_dict={input_x: batch_data})
 
-    # print train process
-    if epoch % print_range == 0:
-        loss_train = sess.run(loss, feed_dict={input_x: train.get('data')})
-        loss_test = sess.run(loss, feed_dict={input_x: test.get('data')})
-        print(datetime.now(), epoch)
-        print('- Train: ', loss_train)
-        print('-  Test: ', loss_test)
+        # print train process
+        if epoch % print_range == 0:
+            loss_train = sess.run(loss, feed_dict={input_x: train.get('data')})
+            loss_test = sess.run(loss, feed_dict={input_x: test.get('data')})
+            print(datetime.now(), epoch)
+            print('- Train: ', loss_train)
+            print('-  Test: ', loss_test)
 
-test_decode_result = sess.run(decode_result, feed_dict={
-                              input_x: test.get('data')})
-test_encode_result = sess.run(encode_result, feed_dict={
-                              input_x: mnist.test.images})
-print('*** finish train ***')
+    test_decode_result = sess.run(decode_result, feed_dict={
+                                input_x: test.get('data')})
+    test_encode_result = sess.run(encode_result, feed_dict={
+                                input_x: mnist.test.images})
+    print('*** finish train ***')
 
 
 # # PLOT
