@@ -66,7 +66,7 @@ used_time
 
 ---
 ### VAE.py
-#### 
+#### apply autoencoder to decode image, and generate new image by select new decode data
 - data  : MNIST
 - layer : 28*28=784 -> 512 -> 512 -> 2(mean, var) -> 512 -> 512 -> 784
 - activation function : softplus, sigmoid
@@ -84,13 +84,28 @@ Epoch: 101 cost= 137.499377324
 - generate images<br>
 ![Imgur](http://i.imgur.com/wkCjX2z.png)
 
+---
+### Skip-Gram
+#### estimated probability of each words close to the target word
+- data  : http://mattmahoney.net/dc/text8.zip
+- layer : text -> word vector(128) -> probability of each words(50,000)
+- additional : Sampled Softmax
+- optimizier : Adam + min-batch
+```
+* 20000 Average loss : 3.73424506655
+* 40000 Average loss : 3.44429408045
+* 60000 Average loss : 3.39420536309
+* 80000 Average loss : 3.36515107585
+* 100000 Average loss : 3.19453594169
+Nearest to 'were'  : are, have, was, had, while, those, been, although,
+Nearest to 'state' : city, states, territory, republic, shadowed, drum, gums, frites,
+```
+![Imgur](http://i.imgur.com/7QG7ktf.png)
 
 ---
 ### CBOW
 
 
----
-### Skip-Gram
 
 
 

@@ -2,8 +2,8 @@
 Reference
 https://classroom.udacity.com/courses/ud730
 https://github.com/rndbrtrnd/udacity-deep-learning/blob/master/5_word2vec.ipynb
+https://www.tensorflow.org/extras/candidate_sampling.pdf
 '''
-
 import tensorflow as tf
 import numpy as np
 from six.moves.urllib.request import urlretrieve  # download data by url
@@ -11,6 +11,7 @@ import zipfile  # read and write zipfile
 import collections  # count and double-ended queue
 import random
 import math
+from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 %matplotlib inline
 
@@ -21,7 +22,7 @@ filename = 'text8.zip'
 textfile, _ = urlretrieve(url + filename, filename)
 with zipfile.ZipFile(textfile) as f:
     words = tf.compat.as_str(f.read(f.namelist()[0])).split()
-    print('Data size %d' % len(words))
+    print('Data size', len(words))
 
 
 # # CREATE VACABULARY DATASET
@@ -110,16 +111,17 @@ def generate_batch(batch_size, scan_num, scan_window):
 
 
 # # CONFIG
-word_vector_dim = 128  # Dimension of the word vectorx
+word_vector_dim = 128 # Dimension of the word vector
 batch_size = 128
 scan_window = 1
 scan_num = 2
-valid_size = 16  # Random set of words to evaluate similarity on.
-valid_window = 100  # Only pick dev samples in the head of the distribution.
-valid_examples = np.array(random.sample(range(valid_window), valid_size)) # random select 16 index from 0~99 for validation
-num_sampled = 64  # Number of negative examples to sample.
+num_sampled = 64 # The number of classes to randomly sample per batch
 num_steps = 100001
 print_range = (num_steps-1) // 10
+# random select target to calculate nearest word base on current train result
+valid_size = 8
+valid_window = 100
+valid_examples = np.array(random.sample(range(valid_window), valid_size)) # random select 16 index from 0~99 for validation
 
 
 # # MODEL
@@ -129,11 +131,11 @@ train_labels = tf.placeholder(tf.int32, shape=[batch_size, 1])  # 128*1*1
 valid_dataset = tf.constant(valid_examples, dtype=tf.int32) # 16*1 random list from 0~100
 
 # Variables.
-embeddings = tf.Variable(tf.random_uniform([vocabulary_size, word_vector_dim], -1.0, 1.0))  # 50,000*128 = vector for all words
-softmax_weights = tf.Variable(tf.truncated_normal([vocabulary_size, word_vector_dim], stddev=1.0 / math.sqrt(word_vector_dim)))  # 50,000*128
+embeddings = tf.Variable(tf.random_uniform([vocabulary_size, word_vector_dim], -1.0, 1.0)) # 50,000*128 = vector for all words
+embed = tf.nn.embedding_lookup(embeddings, train_dataset) # transfer train_dataset to word vector (128*1) => (128*128)
+softmax_weights = tf.Variable(tf.truncated_normal([vocabulary_size, word_vector_dim], stddev=1.0 / math.sqrt(word_vector_dim))) # 50,000*128
 softmax_biases = tf.Variable(tf.zeros([vocabulary_size])) # 50,000*1
 
-# Model.
 # weights(50,000*128) X inputs(128*128) + biases(50,000*1) => 50,000*128 = result for each trainning sample
     # weights: [num_classes, word_vector_dim]    (50,000*128)
     # biases: [num_classes]                      (50,000*1)
@@ -142,56 +144,54 @@ softmax_biases = tf.Variable(tf.zeros([vocabulary_size])) # 50,000*1
     # num_sampled: An int. The number of classes to randomly sample per batch. (64)
     # num_classes: An int. The number of possible classes.                     (50,000)
     # num_true: An int. The number of target classes per training example.     (1)
-    # => output[0] = 50,000*1 = propability to show each word, 
+    # => output[0] = 50,000*1 = the propability for each word near to target 
     #    labels[0] = 1*1 = index of correct answer
-# get partial embeddings data base on train_dataset (50,000*128) => (128*128)
-embed = tf.nn.embedding_lookup(embeddings, train_dataset)
-# Compute the softmax loss, using a sample of the negative labels each time.
+# apply sampled_softmax_loss for faster train
 loss = tf.reduce_mean(
     tf.nn.sampled_softmax_loss(weights=softmax_weights, biases=softmax_biases, inputs=embed,
                                 labels=train_labels, num_sampled=num_sampled, num_classes=vocabulary_size))
 optimizer = tf.train.AdagradOptimizer(1.0).minimize(loss)
-# Compute similarity between minibatch examples and all embeddings.
-norm = tf.sqrt(tf.reduce_sum(tf.square(embeddings), 1, keep_dims=True))  # calculate vector length
+
+# random select target words and check nearest word base on current training result
+norm = tf.sqrt(tf.reduce_sum(tf.square(embeddings), 1, keep_dims=True)) # calculate vector length
 normalized_embeddings = embeddings / norm # normalize embeddings
 valid_embeddings = tf.nn.embedding_lookup(normalized_embeddings, valid_dataset)
 similarity = tf.matmul(valid_embeddings, tf.transpose(normalized_embeddings))  # consine = V1*V2 / |V1|*|V2|
 
+
 # # TRAIN
 init = tf.global_variables_initializer()
-sess = tf.Session()
-sess.run(init)
-average_loss = 0
-for step in range(num_steps):
-    batch_data, batch_labels = generate_batch(batch_size, scan_num, scan_window)
-    feed_dict = {train_dataset: batch_data, train_labels: batch_labels}
-    _, l = sess.run([optimizer, loss], feed_dict=feed_dict)
-    average_loss += l
-    if step % print_range == 0 and step > 0:
-        average_loss = average_loss / print_range
-        print('Average loss at step %d: %f' % (step, average_loss))
-        average_loss = 0
-    if step % print_range == 0:
-        sim = sess.run(similarity, feed_dict=feed_dict)
-        # print most close word base on consine between two vector
-        for i in range(valid_size):
-            valid_word = reverse_dictionary[valid_examples[i]]
-            top_k = 8  # number of nearest neighbors
-            # argsort : sort array and get original index
-            nearest = (-sim[i, :]).argsort()[1:top_k + 1]
-            log = 'Nearest to %s:' % valid_word
-            for k in range(top_k):
-                close_word = reverse_dictionary[nearest[k]]
-                log = '%s %s,' % (log, close_word)
-            print(log)
-final_embeddings = normalized_embeddings.eval()
+with tf.Session() as sess:
+    sess.run(init)
+    average_loss = 0
+    for step in range(num_steps):
+        batch_data, batch_labels = generate_batch(batch_size, scan_num, scan_window)
+        feed_dict = {train_dataset: batch_data, train_labels: batch_labels}
+        _, l = sess.run([optimizer, loss], feed_dict=feed_dict)
+        average_loss += l
+        if step % print_range == 0 and step > 0:
+            # calculate loss
+            average_loss = average_loss / print_range
+            print('*', step, 'Average loss :', average_loss)
+            average_loss = 0
+            # print most close word base on consine between two vector
+            sim = sess.run(similarity, feed_dict=feed_dict)
+            for i in range(valid_size):
+                valid_word = reverse_dictionary[valid_examples[i]]
+                top_k = 8 # number of nearest neighbors
+                nearest = (-sim[i, :]).argsort()[1:top_k + 1] # argsort : sort array and get original index, bypass 0(self)
+                close_words = ''
+                for k in range(top_k):
+                    close_words += reverse_dictionary[nearest[k]] + ', '
+                print('Nearest to', valid_word, ':', close_words)
+    final_embeddings = normalized_embeddings.eval() # word vector for all words
 
 
 # PLOT by t-SNE
 num_points = 400  # plot first 400 words
 tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
 # embed result to 2-dimention point for plot
-two_d_embeddings = tsne.fit_transform(final_embeddings[1:num_points + 1, :])
+two_d_embeddings = tsne.fit_transform(final_embeddings[1:num_points + 1, :]) # bypass first word 'UNK'
 def plot(embeddings, labels):
     assert embeddings.shape[0] >= len(labels), 'More labels than embeddings'
     plt.figure(figsize=(15, 15))  # in inches
