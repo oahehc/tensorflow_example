@@ -89,7 +89,7 @@ Epoch: 101 cost= 137.499377324
 #### estimated probability of each words close to the target word
 - data  : http://mattmahoney.net/dc/text8.zip
 - layer : target word -> embedding to vector(embedding matrix * target word one-hot-encoding) 
-            -> linear model(W*V + b) = probability for each word close to target -> softmax -> loss = cross entropy with label
+            -> linear model(W*V + b) = probability for each word connect to target -> softmax -> loss = cross entropy with label
 - additional : Sampled Softmax
 - optimizier : AdagradOptimizer
 ```
@@ -107,32 +107,31 @@ Nearest to 'state' : city, states, territory, republic, shadowed, drum, gums, fr
 ### CBOW
 #### estimated target word base on input words
 - data  : http://mattmahoney.net/dc/text8.zip
-- layer : input word(near target) ->  embedding to vector -> probability of target word -> softmax -> loss = cross entropy with label
+- layer : input words(connect to target) ->  sum(embedding input to vector) -> probability of target word -> softmax -> loss = cross entropy with label
 - additional : Sampled Softmax
 - optimizier : AdagradOptimizer
 ```
-* 20000 Average loss : 3.51610079776
-Nearest to more : most, less, rather, keeper, cosmopolitan, furthered, very, decrees, 
-* 40000 Average loss : 3.43651606227
-Nearest to more : less, most, rather, very, keeper, greater, decrees, denied, 
-* 60000 Average loss : 3.42005304038
-Nearest to more : less, rather, most, very, smaller, larger, greater, better, 
-* 80000 Average loss : 3.35409456922
-Nearest to more : less, rather, most, very, smaller, fewer, better, larger, 
-* 100000 Average loss : 3.32275327043
-Nearest to more : less, most, very, fewer, fairly, rather, better, larger, 
+2017-08-11 06:13:47.023828 20000 Average loss : 3.12684643236
+2017-08-11 06:15:05.418864 40000 Average loss : 2.92018117781
+2017-08-11 06:16:23.582389 60000 Average loss : 2.83985439647
+2017-08-11 06:17:41.905487 80000 Average loss : 2.76869805927
+2017-08-11 06:18:59.665008 100000 Average loss : 2.57371024392
+Nearest to eight : nine, seven, six, four, five, three, zero, two, 
+Nearest to often : usually, sometimes, generally, commonly, frequently, typically, actually, now, 
 ```
-![Imgur](http://i.imgur.com/fqoJF03.png)
+![Imgur](http://i.imgur.com/mcQzxyH.png)
 
 ---
 ### RNN
 
 
 
+### TensorBoard
+
+
 - additional : L2 regularization
 - additional : Xavier initialization
 - optimizier : decayed learning rate
-TensorBoard
 
 
 ### GAN

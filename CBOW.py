@@ -73,37 +73,25 @@ def generate_batch(batch_size, scan_num, scan_window):
     global data_index
     assert batch_size % scan_num == 0
     assert scan_num <= 2 * scan_window
-    batch = np.ndarray(shape=(batch_size), dtype=np.int32)
-    labels = np.ndarray(shape=(batch_size), dtype=np.int32)
+    batch = np.ndarray(shape=(batch_size, scan_num), dtype=np.int32)
+    labels = np.ndarray(shape=(batch_size, 1), dtype=np.int32)
     span = 2 * scan_window + 1
     buffer = collections.deque(maxlen=span)
     for _ in range(span):
         buffer.append(data[data_index])
         data_index = (data_index + 1) % len(data)
-    for i in range(batch_size // scan_num):  # loop for word
+    for i in range(batch_size):
         select = scan_window
         selected_list = [scan_window]
+        labels[i, 0] = buffer[scan_window] # label is target word
         for j in range(scan_num):
             while select in selected_list:
                 select = random.randint(0, span - 1)
             selected_list.append(select)
-            batch[i * scan_num + j] = buffer[select]
-            labels[i * scan_num + j, 0] = buffer[scan_window]
+            batch[i, j] = buffer[select] # batch is words near target
         buffer.append(data[data_index])
         data_index = (data_index + 1) % len(data)
     return batch, labels
-    # for i in range(batch_size):
-    #     select = scan_window
-    #     selected_list = [scan_window]
-    #     labels[i] = buffer[scan_window] # label is target word
-    #     for j in range(scan_num):
-    #         while select in selected_list:
-    #             select = random.randint(0, span - 1)
-    #         selected_list.append(select)
-    #         batch[i, j] = buffer[select]
-    #     buffer.append(data[data_index])
-    #     data_index = (data_index + 1) % len(data)
-    # return batch, labels
 
 
 # # CONFIG
@@ -121,11 +109,12 @@ valid_examples = np.array(random.sample(range(valid_window), valid_size)) # rand
 
 
 # # MODEL
-train_dataset = tf.placeholder(tf.int32, shape=[batch_size])  # 128*1
+train_dataset = tf.placeholder(tf.int32, shape=[batch_size, scan_num])  # 128*1
 train_labels = tf.placeholder(tf.int32, shape=[batch_size, 1])  # 128*1*1
 valid_dataset = tf.constant(valid_examples, dtype=tf.int32) # 16*1 random list from 0~100
 embeddings = tf.Variable(tf.random_uniform([vocabulary_size, word_vector_dim], -1.0, 1.0)) # 50,000*128 = vector for all words
 embed = tf.nn.embedding_lookup(embeddings, train_dataset) # transfer train_dataset to word vector (128*1) => (128*128)
+embed_sum = tf.reduce_sum(embed, axis=1)
 softmax_weights = tf.Variable(tf.truncated_normal([vocabulary_size, word_vector_dim], stddev=1.0 / math.sqrt(word_vector_dim))) # 50,000*128
 softmax_biases = tf.Variable(tf.zeros([vocabulary_size])) # 50,000*1
 # weights(50,000*128) X inputs(128*128) + biases(50,000*1) => 50,000*128 = result for each trainning sample
@@ -140,7 +129,7 @@ softmax_biases = tf.Variable(tf.zeros([vocabulary_size])) # 50,000*1
     #    labels[0] = 1*1 = index of correct answer
 # apply sampled_softmax_loss for faster train
 loss = tf.reduce_mean(
-    tf.nn.sampled_softmax_loss(weights=softmax_weights, biases=softmax_biases, inputs=embed,
+    tf.nn.sampled_softmax_loss(weights=softmax_weights, biases=softmax_biases, inputs=embed_sum,
                                 labels=train_labels, num_sampled=num_sampled, num_classes=vocabulary_size))
 optimizer = tf.train.AdagradOptimizer(1.0).minimize(loss)
 
