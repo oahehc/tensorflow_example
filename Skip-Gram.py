@@ -3,6 +3,7 @@ Reference
 https://classroom.udacity.com/courses/ud730
 https://github.com/rndbrtrnd/udacity-deep-learning/blob/master/5_word2vec.ipynb
 https://www.tensorflow.org/extras/candidate_sampling.pdf
+https://arxiv.org/pdf/1412.2007v2.pdf
 '''
 import tensorflow as tf
 import numpy as np
@@ -11,6 +12,7 @@ import zipfile  # read and write zipfile
 import collections  # count and double-ended queue
 import random
 import math
+from datetime import datetime
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 %matplotlib inline
@@ -59,8 +61,6 @@ print('Sample data', data[:10])
 
 # # GENERATE TRAINING BATCH
 data_index = 0
-
-
 def generate_batch(batch_size, scan_num, scan_window):
     '''
     input
@@ -102,7 +102,7 @@ def generate_batch(batch_size, scan_num, scan_window):
             # add target word to batch
             batch[i * scan_num + j] = buffer[scan_window]
             # add related word to labels
-            labels[i * scan_num + j, 0] = buffer[select]
+            labels[i * scan_num + j, 0] = buffer[select] # sampled_softmax_loss: num_true = 1 for this model
         # append next data to buffer, first element will auto remove base on
         # maxlen setting
         buffer.append(data[data_index])
@@ -125,22 +125,19 @@ valid_examples = np.array(random.sample(range(valid_window), valid_size)) # rand
 
 
 # # MODEL
-# Input data.
 train_dataset = tf.placeholder(tf.int32, shape=[batch_size])  # 128*1
 train_labels = tf.placeholder(tf.int32, shape=[batch_size, 1])  # 128*1*1
 valid_dataset = tf.constant(valid_examples, dtype=tf.int32) # 16*1 random list from 0~100
-
-# Variables.
 embeddings = tf.Variable(tf.random_uniform([vocabulary_size, word_vector_dim], -1.0, 1.0)) # 50,000*128 = vector for all words
 embed = tf.nn.embedding_lookup(embeddings, train_dataset) # transfer train_dataset to word vector (128*1) => (128*128)
 softmax_weights = tf.Variable(tf.truncated_normal([vocabulary_size, word_vector_dim], stddev=1.0 / math.sqrt(word_vector_dim))) # 50,000*128
 softmax_biases = tf.Variable(tf.zeros([vocabulary_size])) # 50,000*1
-
 # weights(50,000*128) X inputs(128*128) + biases(50,000*1) => 50,000*128 = result for each trainning sample
     # weights: [num_classes, word_vector_dim]    (50,000*128)
     # biases: [num_classes]                      (50,000*1)
     # inputs: [batch_size, word_vector_dim]      (128*128)
     # labels: [batch_size, num_true]             (128*1)
+    # * in softmax_cross_entropy_with_logits, labels format is one-hot-encoding, in sampled_softmax_loss use class index
     # num_sampled: An int. The number of classes to randomly sample per batch. (64)
     # num_classes: An int. The number of possible classes.                     (50,000)
     # num_true: An int. The number of target classes per training example.     (1)
@@ -169,10 +166,10 @@ with tf.Session() as sess:
         feed_dict = {train_dataset: batch_data, train_labels: batch_labels}
         _, l = sess.run([optimizer, loss], feed_dict=feed_dict)
         average_loss += l
-        if step % print_range == 0 and step > 0:
+        if step % print_range == 0:
             # calculate loss
             average_loss = average_loss / print_range
-            print('*', step, 'Average loss :', average_loss)
+            print(datetime.now(), step, 'Average loss :', average_loss)
             average_loss = 0
             # print most close word base on consine between two vector
             sim = sess.run(similarity, feed_dict=feed_dict)

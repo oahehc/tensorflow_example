@@ -77,7 +77,7 @@ for epoch in range(epochs):
         _, cost_val = sess.run((optimizer, cost), feed_dict={x: batch_xs, input_data_num: batch_size})
         total_cost += cost_val
     if epoch%print_range == 0:
-        print('Epoch:', epoch+1, 'cost=', total_cost/total_batch)
+        print(datetime.now(), 'Epoch:', epoch+1, 'cost=', total_cost/total_batch)
 
 save_path = saver.save(sess, save_filename)
 print('Model saved in file: ', format(save_path))

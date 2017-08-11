@@ -88,14 +88,15 @@ Epoch: 101 cost= 137.499377324
 ### Skip-Gram
 #### estimated probability of each words close to the target word
 - data  : http://mattmahoney.net/dc/text8.zip
-- layer : text -> word vector(128) -> probability of each words(50,000)
+- layer : target word -> embedding to vector(embedding matrix * target word one-hot-encoding) 
+            -> linear model(W*V + b) = probability for each word close to target -> softmax -> loss = cross entropy with label
 - additional : Sampled Softmax
-- optimizier : Adam + min-batch
+- optimizier : AdagradOptimizer
 ```
-* 20000 Average loss : 3.73424506655
-* 40000 Average loss : 3.44429408045
-* 60000 Average loss : 3.39420536309
-* 80000 Average loss : 3.36515107585
+*  20000 Average loss : 3.73424506655
+*  40000 Average loss : 3.44429408045
+*  60000 Average loss : 3.39420536309
+*  80000 Average loss : 3.36515107585
 * 100000 Average loss : 3.19453594169
 Nearest to 'were'  : are, have, was, had, while, those, been, although,
 Nearest to 'state' : city, states, territory, republic, shadowed, drum, gums, frites,
@@ -104,11 +105,24 @@ Nearest to 'state' : city, states, territory, republic, shadowed, drum, gums, fr
 
 ---
 ### CBOW
-
-
-
-
-
+#### estimated target word base on input words
+- data  : http://mattmahoney.net/dc/text8.zip
+- layer : input word(near target) ->  embedding to vector -> probability of target word -> softmax -> loss = cross entropy with label
+- additional : Sampled Softmax
+- optimizier : AdagradOptimizer
+```
+* 20000 Average loss : 3.51610079776
+Nearest to more : most, less, rather, keeper, cosmopolitan, furthered, very, decrees, 
+* 40000 Average loss : 3.43651606227
+Nearest to more : less, most, rather, very, keeper, greater, decrees, denied, 
+* 60000 Average loss : 3.42005304038
+Nearest to more : less, rather, most, very, smaller, larger, greater, better, 
+* 80000 Average loss : 3.35409456922
+Nearest to more : less, rather, most, very, smaller, fewer, better, larger, 
+* 100000 Average loss : 3.32275327043
+Nearest to more : less, most, very, fewer, fairly, rather, better, larger, 
+```
+![Imgur](http://i.imgur.com/fqoJF03.png)
 
 ---
 ### RNN
