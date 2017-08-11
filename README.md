@@ -32,7 +32,14 @@ Test  | 0.9875	  | 0.9595    | 0.9826
 *Train only measure min-batch
 ```
 
---- 
+---
+### TensorBoard.py
+#### use CNN.py model to create tensorbaord for visualize model structure
+- model structure<br>
+![Imgur](http://i.imgur.com/7NPm9ls.png)
+- layer detail<br>
+![Imgur](http://i.imgur.com/fVC6MyP.png)
+---
 ### Autoencoder.py
 #### reduce dimension for MNIST images cluster & visualization
 - data  : MNIST
@@ -126,7 +133,6 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 
 
 
-### TensorBoard
 
 
 - additional : L2 regularization
