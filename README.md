@@ -130,11 +130,11 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 ![Imgur](http://i.imgur.com/mcQzxyH.png)
 
 ---
+[TBD] ------------------------
 ### RNN - Recurrent Neural Networks
 
 
-
-
+---
 
 - additional : L2 regularization
 - additional : Xavier initialization
