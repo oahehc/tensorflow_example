@@ -131,7 +131,15 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 
 ---
 [TBD] ------------------------
-### RNN - Recurrent Neural Networks
+### SimpleRNN - Recurrent Neural Networks
+
+
+---
+### LSTM - long short-term memory
+
+
+---
+### GRU - Gated Recurrent Units
 
 
 ---
