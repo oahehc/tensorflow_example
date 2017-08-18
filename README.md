@@ -1,9 +1,9 @@
-### activation_function
+### activation_function.py
 ![Imgur](http://i.imgur.com/qh2ERFy.png)
 
 
 --- 
-### Basic_Model.py
+### DNN.py - deep neural network
 #### basic deep learning model to classify number's images from 0 to 9
 - data  : MNIST
 - layer : 28*28=784 -> 1024 -> 32 -> 10
@@ -17,7 +17,7 @@ epochs = 101
 ```
 
 ---
-### CNN.py
+### CNN.py - Convolutional Neuron Networks
 #### apply CNN model to classify number's images from 0 to 9
 - data  : MNIST
 - layer : 28 * 28 * 1 -> 14 * 14 * 4 -> 7 * 7 * 8 -> 512 -> 10
@@ -39,6 +39,7 @@ Test  | 0.9875	  | 0.9595    | 0.9826
 ![Imgur](http://i.imgur.com/7NPm9ls.png)
 - layer detail<br>
 ![Imgur](http://i.imgur.com/fVC6MyP.png)
+
 ---
 ### Autoencoder.py
 #### reduce dimension for MNIST images cluster & visualization
@@ -58,7 +59,7 @@ epochs = 101
 ![Imgur](http://i.imgur.com/KQih2JE.png)
 
 ---
-### t-SNE_PCA.py
+### t-SNE_PCA.py - t-Distributed Stochastic Neighbor Embedding / Principal components analysis
 #### reduce dimension for MNIST images cluster & visualization
 - PCA
 - t-SNE
@@ -72,7 +73,7 @@ used_time
 ![Imgur](http://i.imgur.com/4yDlTsF.png)
 
 ---
-### VAE.py
+### VAE.py - Variational Autoencoder
 #### apply autoencoder to decode image, and generate new image by select new decode data
 - data  : MNIST
 - layer : 28*28=784 -> 512 -> 512 -> 2(mean, var) -> 512 -> 512 -> 784
@@ -92,7 +93,7 @@ Epoch: 101 cost= 137.499377324
 ![Imgur](http://i.imgur.com/wkCjX2z.png)
 
 ---
-### Skip-Gram
+### Skip-Gram.py
 #### estimated probability of each words close to the target word
 - data  : http://mattmahoney.net/dc/text8.zip
 - layer : target word -> embedding to vector(embedding matrix * target word one-hot-encoding) 
@@ -111,7 +112,7 @@ Nearest to 'state' : city, states, territory, republic, shadowed, drum, gums, fr
 ![Imgur](http://i.imgur.com/7QG7ktf.png)
 
 ---
-### CBOW
+### CBOW.py - Continuous Bag of Words
 #### estimated target word base on input words
 - data  : http://mattmahoney.net/dc/text8.zip
 - layer : input words(connect to target) ->  sum(embedding input to vector) -> probability of target word -> softmax -> loss = cross entropy with label
@@ -129,7 +130,7 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 ![Imgur](http://i.imgur.com/mcQzxyH.png)
 
 ---
-### RNN
+### RNN - Recurrent Neural Networks
 
 
 
@@ -140,5 +141,5 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 - optimizier : decayed learning rate
 
 
-### GAN
+### GAN - Generative Adversarial Network
 ### transfer learning
