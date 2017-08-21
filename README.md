@@ -130,20 +130,15 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 ![Imgur](http://i.imgur.com/mcQzxyH.png)
 
 ---
+### RNN.py - Recurrent Neural Networks
+- basicRNN
+- LSTM (long short-term memory)
+- GRU (Gated Recurrent Units)
+![Imgur](http://i.imgur.com/I4zAKOT.png)
+
+---
+
 [TBD] ------------------------
-### SimpleRNN - Recurrent Neural Networks
-
-
----
-### LSTM - long short-term memory
-
-
----
-### GRU - Gated Recurrent Units
-
-
----
-
 - additional : L2 regularization
 - additional : Xavier initialization
 - optimizier : decayed learning rate
