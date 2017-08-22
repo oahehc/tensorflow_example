@@ -93,6 +93,18 @@ Epoch: 101 cost= 137.499377324
 ![Imgur](http://i.imgur.com/wkCjX2z.png)
 
 ---
+### RNN.py - Recurrent Neural Networks
+- data  : MNIST
+- layer : encoder > RNN > decoder
+- RNN type : 
+  - basicRNN
+  - LSTM (long short-term memory)
+  - GRU (Gated Recurrent Units)
+
+![Imgur](http://i.imgur.com/I4zAKOT.png)
+
+
+---
 ### Skip-Gram.py
 #### estimated probability of each words close to the target word
 - data  : http://mattmahoney.net/dc/text8.zip
@@ -130,11 +142,6 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 ![Imgur](http://i.imgur.com/mcQzxyH.png)
 
 ---
-### RNN.py - Recurrent Neural Networks
-- basicRNN
-- LSTM (long short-term memory)
-- GRU (Gated Recurrent Units)
-![Imgur](http://i.imgur.com/I4zAKOT.png)
 
 
 [TBD] ------------------------

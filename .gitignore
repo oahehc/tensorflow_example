@@ -1,4 +1,4 @@
 MNIST_data/
-_test.py
+_test*.py
 model/
 temp/
