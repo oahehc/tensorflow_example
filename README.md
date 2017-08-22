@@ -119,11 +119,11 @@ Nearest to 'state' : city, states, territory, republic, shadowed, drum, gums, fr
 - additional : Sampled Softmax
 - optimizier : AdagradOptimizer
 ```
-2017-08-11 06:13:47.023828 20000 Average loss : 3.12684643236
-2017-08-11 06:15:05.418864 40000 Average loss : 2.92018117781
-2017-08-11 06:16:23.582389 60000 Average loss : 2.83985439647
-2017-08-11 06:17:41.905487 80000 Average loss : 2.76869805927
-2017-08-11 06:18:59.665008 100000 Average loss : 2.57371024392
+*  20000 Average loss : 3.12684643236
+*  40000 Average loss : 2.92018117781
+*  60000 Average loss : 2.83985439647
+*  80000 Average loss : 2.76869805927
+* 100000 Average loss : 2.57371024392
 Nearest to eight : nine, seven, six, four, five, three, zero, two, 
 Nearest to often : usually, sometimes, generally, commonly, frequently, typically, actually, now, 
 ```
@@ -136,13 +136,16 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 - GRU (Gated Recurrent Units)
 ![Imgur](http://i.imgur.com/I4zAKOT.png)
 
----
 
 [TBD] ------------------------
+---
+### GAN - Generative Adversarial Network
+
+
+---
+
 - additional : L2 regularization
 - additional : Xavier initialization
 - optimizier : decayed learning rate
 
-
-### GAN - Generative Adversarial Network
 ### transfer learning

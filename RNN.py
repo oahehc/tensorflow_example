@@ -34,6 +34,7 @@ y1_reshape = tf.reshape(y1, [-1, n_steps, n_hidden_units]) # => (256 batch, 28 s
 # cell = tf.contrib.rnn.BasicRNNCell(n_hidden_units) # basic RNN
 # cell = tf.contrib.rnn.BasicLSTMCell(n_hidden_units) # LSTM
 cell = tf.contrib.rnn.GRUCell(n_hidden_units) # GRU
+# state = cell.zero_state(batch_size, dtype=tf.float32)
 output_rnn, final_state = tf.nn.dynamic_rnn(cell, y1_reshape, time_major=False, dtype=tf.float32) # time_major=False for data format = (batch, time, data)
 # output layer: 
 o_weight = tf.Variable(tf.random_normal([n_hidden_units, n_classes]))
