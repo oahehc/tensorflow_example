@@ -95,7 +95,7 @@ Epoch: 101 cost= 137.499377324
 ---
 ### RNN.py - Recurrent Neural Networks
 - data  : MNIST
-- layer : encoder > RNN > decoder
+- layer : encoder(time, data -> time, feature) > RNN(time, feature -> time, est.feature) > decoder(est.feature -> class)
 - RNN type : 
   - basicRNN
   - LSTM (long short-term memory)
@@ -145,14 +145,17 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 
 
 [TBD] ------------------------
+
 ---
 ### GAN - Generative Adversarial Network
 
 
 ---
+### transfer learning
 
+
+
+---
 - additional : L2 regularization
 - additional : Xavier initialization
 - optimizier : decayed learning rate
-
-### transfer learning
