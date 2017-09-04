@@ -147,13 +147,30 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 [TBD] ------------------------
 
 ---
-### GAN - Generative Adversarial Network
+### GAN.py - Generative Adversarial Network
+- data  : MNIST
+- generator : 128 -> 256 -> 784=28*28
+- discriminator : 784 -> 256 -> 1
+- activation function : softplus, sigmoid
+- optimizier : Adam + min-batch
 
 
 ---
-### transfer learning
+### DCGAN.py - Deep Convolutional Generative Adversarial Network 
 
 
+---
+### Transfer Learning
+#### inception model
+https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/07_Inception_Model.ipynb
+https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/08_Transfer_Learning.ipynb
+
+
+---
+### Matrix Factorization
+
+---
+### Highway Network
 
 ---
 - additional : L2 regularization

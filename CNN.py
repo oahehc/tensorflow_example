@@ -27,7 +27,7 @@ inputDimension = mnist.train.images.shape[1] # 28*28 = 784
 outputDimension = mnist.train.labels.shape[1] # class 0~9 = 10
 batch_size = 512
 batch_num = mnist.train.images.shape[0] // batch_size
-train_drop_rate = 1
+train_drop_rate = 0.5
 layer1_FilterSize = 5
 layer1_Depth = 4
 layer2_FilterSize = 5
@@ -91,12 +91,15 @@ with tf.Session() as sess:
     print('*** finish ***')
 
     # # TRAINING RESULT TEST
-    test_num = 10
     test_dataset = mnist.test.images
-    # np.random.shuffle(test_dataset)
-    test_image = test_dataset[0:test_num, ]
+    test_image = test_dataset[0:9, ]
     test_result = sess.run(tf.argmax(prediction,1), feed_dict={input_x:test_image, drop_rate: 1.0})
-    for i in range(test_num):
-        print('prediction: ',test_result[i])
-        plt.imshow(np.reshape(test_image[i], (28, 28)))
-        plt.show()
+    fig, axes = plt.subplots(3, 3)
+    for i, ax in enumerate(axes.flat):
+        ax.imshow(np.reshape(test_image[i], (28, 28)))
+        xlabel = "Pred: {0}".format(test_result[i])
+        ax.set_xlabel(xlabel)
+        # Remove ticks from the plot.
+        ax.set_xticks([])
+        ax.set_yticks([])
+    plt.show()
