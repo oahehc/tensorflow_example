@@ -142,24 +142,25 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 ![Imgur](http://i.imgur.com/mcQzxyH.png)
 
 ---
-
-
-[TBD] ------------------------
-
----
 ### GAN.py - Generative Adversarial Network
-- data  : MNIST
+- data : MNIST
 - generator : 128 -> 256 -> 784=28*28
 - discriminator : 784 -> 256 -> 1
 - activation function : softplus, sigmoid
 - optimizier : Adam + min-batch
-
-
----
-### DCGAN.py - Deep Convolutional Generative Adversarial Network 
-
+![Imgur](https://i.imgur.com/GY8KmzY.png)
 
 ---
+### DCGAN.py - Deep Convolutional Generative Adversarial Network
+- data : MNIST
+- generator : 128 -> 7*7*64 -> 14*14*32 -> 28*28*1
+- discriminator : 28*28*1 -> 14*14*32(strides=2) -> 7*7*64(strides=2) -> 1
+- activation function : relu, tanh, sigmoid
+- optimizier : Adam + min-batch
+![Imgur](https://i.imgur.com/c2aREyw.png)
+
+---
+[TBD] ------------------------
 ### Transfer Learning
 #### inception model
 https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/07_Inception_Model.ipynb
