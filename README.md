@@ -160,7 +160,7 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 ![Imgur](https://i.imgur.com/c2aREyw.png)
 
 ---
-[TBD] ------------------------
+TODO ----------------------------------------------------------------
 ### WGAN.py - Wasserstein Generative Adversarial Network
 
 ---
@@ -170,16 +170,11 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 #### inception model
 https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/07_Inception_Model.ipynb
 https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/08_Transfer_Learning.ipynb
-
-
 ---
 ### Matrix Factorization
-
----
 ### Highway Network
 ### Attention-based Model
 ### Reinforcement Learning
-
 ---
 - additional : L2 regularization
 - additional : Xavier initialization
