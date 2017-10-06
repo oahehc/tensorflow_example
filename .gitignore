@@ -2,3 +2,4 @@ MNIST_data/
 _test*.py
 model/
 temp/
+data/

@@ -161,6 +161,11 @@ Nearest to often : usually, sometimes, generally, commonly, frequently, typicall
 
 ---
 [TBD] ------------------------
+### WGAN.py - Wasserstein Generative Adversarial Network
+
+---
+### Conditional GAN
+---
 ### Transfer Learning
 #### inception model
 https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/07_Inception_Model.ipynb
@@ -172,8 +177,9 @@ https://github.com/Hvass-Labs/TensorFlow-Tutorials/blob/master/08_Transfer_Learn
 
 ---
 ### Highway Network
+### Attention-based Model
+### Reinforcement Learning
 
 ---
 - additional : L2 regularization
 - additional : Xavier initialization
-- optimizier : decayed learning rate
