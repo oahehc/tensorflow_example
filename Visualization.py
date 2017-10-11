@@ -120,3 +120,48 @@ def auto_size(df, col_x, col_y, col_size):
     plt.legend(handles = [red_patch, blue_patch])
     return 'Done'
 auto_size(dataFrame, 'YearBuilt', 'SalePrice', 'LotArea')
+
+
+# marker shape
+def auto_shape(df):
+    import matplotlib.pyplot as plt
+    import matplotlib.lines as mlines
+    LotConfig = ['Corner', 'Corner', 'Inside', 'Inside']
+    LotShape = ['IR1', 'Reg', 'IR1', 'Reg']
+    mrks = ['o', 'o', '+', '+']
+    cols = ['Red', 'Blue', 'DarkRed', 'DarkBlue']
+    ldg = []
+    fig = plt.figure(figsize=(12, 6))
+    ax = fig.gca()
+    for asp, fl, mk ,cl in zip(LotConfig, LotShape, mrks, cols):
+        temp = df.ix[(df['LotConfig'] == asp) & (df['LotShape'] == fl)]
+        if temp.shape[0] > 0:
+            temp.plot(kind = 'scatter', x = 'YearBuilt', y = 'SalePrice', ax = ax, color = cl, marker = mk, alpha = 0.5)
+        ldg.append(mlines.Line2D([], [], color = cl, marker = mk, markersize = 10, label=(asp + ' and ' + fl)))
+    plt.legend(handles = ldg)
+    return 'Done'
+auto_shape(dataFrame)
+
+
+# split violin plot
+sns.set_style('whitegrid')
+sns.violinplot(data = dataFrame, x = 'YrSold', y = 'SalePrice', hue = 'Street' , split = True)
+# box plots
+sns.set_style('whitegrid')
+sns.boxplot(data = dataFrame, x = 'YrSold', y = 'SalePrice', hue = 'Street')
+
+
+# pair wise plot
+num_cols = ['YrSold', 'OverallQual', 'OverallCond']
+sns.pairplot(dataFrame[num_cols], hue = 'YrSold', palette = 'Set2', diag_kind = 'kde', size = 2)
+
+
+# facet plot
+# g = sns.FacetGrid(dataFrame, col = 'LotShape')
+# g.map(sns.distplot, 'SalePrice')
+# g = sns.FacetGrid(dataFrame, col = 'LotShape', row = 'Fence')
+# g.map(sns.distplot, 'SalePrice')
+g = sns.FacetGrid(dataFrame, col = 'LotShape', row = 'Fence', hue = 'Street', palette = 'Set2')
+g.map(sns.regplot, 'LotArea', 'SalePrice', fit_reg = False)
+
+
